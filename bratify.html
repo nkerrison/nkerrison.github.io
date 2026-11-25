@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <!-- This makes the website "pretty" -->
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- This is what displays on the tab -->
+    <title>brat-ify your python plots | Nicole Kerrison</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- MathJax, used to display LaTeX equations -->
+    <script>
+        MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+        };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+        </script>
+
+</head>
+
+<header>
+    <h1><a href="/"><img src="../static/header-image.png" width="150px"></a></h1>
+    <nav>
+        <li><a href="/">Home</a></li>
+        <li><a href="/cv">CV</a></li>
+        <li><a href="/resources">Resources</a></li>
+    </nav>
+</header>
+        
+<body>
+
+    <div>
+
+        <a href="/resources">Back to Resources</a>
+
+        <br>
+        <br>
+
+        <center><img src="../static/brat-imgs/bratify.gif" width="800px"></center>
+
+        <br>
+
+        The repository linked below contains several Matplotlib <a href="https://matplotlib.org/stable/users/explain/customizing.html" target="_blank">style sheets</a> designed to help you brat-ify your python plots. BRAT's cover font uses <a href="https://learn.microsoft.com/en-us/typography/font-list/arial-narrow" target="_blank">Arial Narrow</a>, which you will need in order to fully embrace the aesthetic (assuming that's your goal). If your Mac has Microsoft Office installed, you should already have this font on your system.
+
+        <br><br>
+
+        <ol>
+            <li><a href="https://github.com/nkerrison/bratify" target="_blank">Download the GitHub repository</a> by clicking the link and selecting <strong>Code</strong> &#8594; <strong>Download ZIP</strong>.</li>
+            <li> When you installed Matplotlib, it came with several built-in style sheets stored in a folder titled <code>stylelib</code>. To install the following brat-inspired style sheets, you'll need to find where on your computer that <code>stylelib</code> folder is hiding:
+        <br>
+    <pre><code>
+    import matplotlib
+    print(matplotlib.get_data_path())
+    </code></pre>
+
+    For my install, the <code>stylelib</code> folder is here:
+    
+    <pre><code>
+    ~/anaconda3/lib/python3.11/site-packages/matplotlib/mpl-data
+    </code></pre></li>
+    <li>
+    Unzip the GitHub repository and move its contents to the <code>stylelib</code> folder. You can use Finder and select <strong>Go</strong> &#8594; <strong>Go to Folder...</strong> to quickly navigate to the <code>stylelib</code> folder.</li>
+    <li>The style sheets are ready to be used! You can try plotting the following, if you don't already have some code to test:
+
+    <pre><code>
+    # --- imports
+    import matplotlib.pyplot as plt
+    import numpy as np
+    
+    # --- data
+    x = np.linspace(0, 10, 100)
+    sin = np.sin(x)
+    cos = np.cos(x)
+    
+    # --- plot
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, sin, label='sine wave')
+    plt.scatter(x, cos, label='cosine wave')
+    
+    # --- plot settings
+    plt.title('plot title')
+    plt.xlabel('x-axis label')
+    plt.ylabel('y-axis label')
+    plt.legend()
+    </code></pre>
+    </li>
+    <li>
+        To use a style sheet, include one of the following commands in your code:
+<br><br>
+
+    <h2>BRAT (2024)</h2>
+    
+    <pre><code>
+    plt.style.use('brat')
+    </code></pre>
+
+    <center><img src="../static/brat-imgs/brat.png" width="700px"></center>
+
+    <br><br><h2>CRASH (2022)</h2>
+    <pre><code>
+    plt.style.use('crash')
+    </code></pre>
+
+    <center><img src="../static/brat-imgs/crash.png" width="700px"></center>
+
+    <br><br><h2>how i'm feeling now (2020)</h2>
+    <pre><code>
+    plt.style.use('how-im-feeling-now')
+    </code></pre>
+    <center><img src="../static/brat-imgs/how-im-feeling-now.png" width="700px"></center>
+
+    <br><br><h2>Charli (2019)</h2>
+    <pre><code>
+    plt.style.use('charli')
+    </code></pre>
+    <center><img src="../static/brat-imgs/charli.png" width="700px"></center>
+
+    <br><br><h2>Pop 2 (2017)</h2>
+    <pre><code>
+    plt.style.use('pop-2')
+    </code></pre>
+    <center><img src="../static/brat-imgs/pop-2.png" width="700px"></center>
+
+    <br><br><h2>Number 1 Angel (2017)</h2>
+    <pre><code>
+    plt.style.use('number-1-angel')
+    </code></pre>
+    <center><img src="../static/brat-imgs/number-1-angel.png" width="700px"></center>
+
+    <br><br><h2>SUCKER (2014)</h2>
+    <pre><code>
+    plt.style.use('sucker')
+    </code></pre>
+    <center><img src="../static/brat-imgs/sucker.png" width="700px"></center>
+
+    <br><br><h2>True Romance (2013)</h2>
+    <pre><code>
+    plt.style.use('true-romance')
+    </code></pre>
+    <center><img src="../static/brat-imgs/true-romance.png" width="700px"></center>
+    </li>
+        </ol>
+    
+<br>
+    
+
+    </div>
+    
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <!-- This makes the website "pretty" -->
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- This is what displays on the tab -->
+    <title>Cosmic Quickstep | Nicole Kerrison</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- MathJax, used to display LaTeX equations -->
+    <script>
+        MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+        };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+        </script>
+
+</head>
+
+<header>
+    <h1><a href="/"><img src="../static/header-image.png" width="150px"></a></h1>
+    <nav>
+        <li><a href="/">Home</a></li>
+        <li><a href="/cv">CV</a></li>
+        <li><a href="/musings">Musings</a></li>
+        <li><a href="/resources">Resources</a></li>
+    </nav>
+</header>
+        
+<body>
+
+    <div>
+
+        <script>
+            document.write('<a href="' + document.referrer + '">Previous page</a>');
+        </script>
+
+        <br>
+        <br>
+
+        <center><img src="../static/cq-header.png" width="800px"><br>
+        <em>Don't underestimate how fun an N-body code can be!</em></center>
+
+        <br><br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;The $N$-body problem is concerned with how two or more objects move under the influence of gravity. While exact solutions are difficult to get, we can use numerical methods to get approximate solutions.
+        <br>
+        <br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;One of the simplest differential equations describing circular motion is $r''(t)=-r$, which may be written as a system of two equations: $r'=v$ and $v'=-r$. Using Euler's method, we can derive formulas expressing $x(t+h)$ and $v(t+h)$ using $x(t)$, $v(t)$, and $h$, where $h$ is the time step:
+        <br>
+        <br>
+        <center>$r(t+h) \approx r(t)+r'(t) \times h \approx r(t)+v(t) \times h$</center>
+        <center>$v(t+h) \approx v(t)+v'(t) \times h \approx v(t)-x(t) \times h$</center>
+
+        <br>
+        
+        &nbsp;&nbsp;&nbsp;&nbsp;With a little intuition, we find $r(t)=\sin(t)$ and $v(t)=\cos(t)$ satisfy the initial conditions, and we can re-write the previous formulas:
+        <br>
+        <br>
+        <center>$r(t+h) \approx r(t)+v(t) \times h \approx \sin(t)+\cos(t) \times h$</center>
+        <center>$v(t+h) \approx v(t)-x(t) \times h \approx \cos(t)-\sin(t) \times h$</center>
+
+        <br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;First, let's consider the forces present in a simple, closed two-body system. Newton's law of universal gravitation defines the gravitational force between two spherical objects of masses $m_1$ and $m_2$ separated by distance $r$ as
+        <br><br>
+        <center>$\vec{F}=\frac{\gamma \, m_1 m_2}{r^2}\hat{r}$,</center>
+        <br>
+
+        where $\gamma$ is the universal gravitational constant. The unit vector $\mathbf{r}$ originates from the center-of-mass of $m_1$ towards the center-of-mass of $m_2$, and by definition may be rewritten as <em>r</em> / ||<em>r</em>||. Doing so, our equation for the gravitational force becomes:
+        <br><br>
+        <center>$\vec{F}=\frac{\gamma \, m_1 m_2}{r^3}\vec{r}_{12}$</center>
+        <br>
+
+        Newton's second law states that a force acting on a point of mass will lead to a change in momentum per unit time:
+        <br><br>
+        <center>$\vec{F}_{21}=m_{1}\frac{d^2r_{1}}{dt^2}$</center>
+        <br>
+        We can set the above two equations equal to get
+        <br><br>
+        <center>$m_{1}\frac{d^2r_{1}}{dt^2}=\frac{\gamma m_1 m_2}{r^3}\vec{r}_{12}$</center>
+        <br>
+        which may be reduced to a pair of coupled first-order ordinary differential equations:
+        <br><br>
+        <center>$m_1\frac{dv}{dt}=\frac{\gamma m_1 m_2}{r^3}\vec{r}_{12}$</center>
+        
+        <br>
+        
+        <center>$\frac{dr}{dt}=\vec{v}$</center>
+        <br>
+        
+        Dividing both sides of the above by $m_{1}$, we receive the following expression for the acceleration of object 1:
+        <br><br>
+        <center>$\frac{d^2r_{1}}{dt^2} = \frac{\gamma m_2}{r^3}\vec{r}_{12}$</center>
+        
+        Additionally, we can write the acceleration of object 2 as:
+        <br><br>
+        <center>$\frac{d^2r_{2}}{dt^2} = \frac{\gamma m_1}{r^3}\vec{r}_{21}$</center>
+        <br>
+        We then translate Equations 7 and 8 into the functions <code>accel_obj1()</code> and <code>accel_obj2</code>, respectively:
+
+        <br><br>
+      
+        <code>
+        <strong>def</strong> accel_obj1(r1, r2):<br>
+        &emsp;&emsp; r = r2 - r1<br>
+        &emsp;&emsp; norm_r = np.linalg.norm(r)<br>
+        &emsp;&emsp; accel1 = G * m2 * r / norm_r**3<br>
+        &emsp;&emsp; <strong>return</strong> accel1
+        <br><br>
+        <strong>def</strong> accel_obj2(r1, r2):<br>
+        &emsp;&emsp; r = r1 - r2<br>
+        &emsp;&emsp; norm_r = np.linalg.norm(r)<br>
+        &emsp;&emsp; accel2 = G * m1 * r / norm_r**3<br>
+        &emsp;&emsp; <strong>return</strong> accel2<br>
+        </code>
+
+        <br><br>
+
+        The total energy of a two-body system equals the sum of object 1's kinetic energy $(T_{1})$, object 2's kinetic energy $(T_{2})$, and the potential energy $(U)$ of the system:
+        <br><br>
+        <center>$E_{\text{tot}} = T_{1} +T_{2} + U$</center>
+        <br>
+        Both kinetic and potential energy may be represented as a function of time:
+        <br><br>
+        <center>$T(t)=\frac{1}{2}\sum_{k=1}^N m_{k}v_{k}(t)^2$</center><br>
+        
+        <center>$U(t)=-\gamma \sum_{k < n} \frac{m_{k}m_{n}}{|r_{k}(t)-r_{n}(t)|}$</center>
+        <br>
+        
+        The <code>energy()</code> function provides a more explicit measure of how each numerical method influences the behavior of a system's total energy over time:
+        <br><br>
+        <code>
+            <strong>def</strong> energy(v1,v2,r1,r2):<br>
+                    &emsp;&emsp; <strong>for</strong> t <strong>in range</strong>(0, t_range):<br>
+                    &emsp;&emsp;&emsp;&emsp; T1[t] = 0.5 * m1 * np.linalg.norm(v1[t])**2<br>
+                    &emsp;&emsp;&emsp;&emsp; T2[t] = 0.5 * m2 * np.linalg.norm(v2[t])**2<br>
+                    &emsp;&emsp;&emsp;&emsp; U[t]  = G * m1 * m2 / np.linalg.norm(r1[t] - r2[t])<br>
+                    &emsp;&emsp;&emsp;&emsp; Etot[t] = T1[t] + T2[t] - U[t]
+        </code>
+        <br><br>
+        Given an initial condition, Euler's method may be used to obtain a numerical solution to first-order differential equations. The method states that the value of a differentiable function at $t+\delta{t}$ may be approximated as $f(t+\delta{t}) \approx f(t)+f'(t)\times\delta{t}$, where $\delta{t}$ is called the ``time step.'' Note: Euler's Method is simply the first two terms of a Taylor Series.
+        <br><br>
+        <center>$f(t+\delta{t}) \approx f(t)+f'(t)\times\delta{t}+\frac{f''(t)\times \delta{t}^2}{2!}+\frac{f'''(t)\times\delta{t}^3}{3!}+\ldots$</center>
+        <br>
+        We derive formulas for the position $r_{k}(t+\delta{t})$ and momentum $m_{k}v_{k}(t+\delta{t})$ at each time step as follows:
+        <br><br>
+        <center>$r_{k}(t+\delta{t}) \approx r_{k}(t)+v_{k}(t)\times\delta{t}$</center><br>
+        
+        <center>$m_{k}v_{k}(t+\delta{t}) \approx m_{k}v_{k}(t)+F_{k}(t)\times\delta{t}$</center>
+        <br>
+        For the purpose of our code, we rewrite $\textnormal{Eq.}\,(11)$ as:
+        <br><br>
+        <center>$v_{k}(t+\delta{t}) \approx v_{k}(t)+\frac{F_{k}(t)}{m_{k}}\times\delta{t} \approx v_{k}(t)+a_{k}(t)\times\delta{t}$</center>
+        <br>
+        These functions are directly used in our code. $\textnormal{Eqs.}\,(14)$ and $(12)$ are translated to Python as <code>v_obj1[t+1]</code> and <code>r_obj1[t+1]</code>, respectively.<br><br>
+
+        <br><br><br>
+        
+        <h2>The Euler-Cromer Method</h2>
+
+        <br>
+        
+        In the Euler-Cromer (or predictor-corrector) method, the <code>for</code> loop used in the Euler method is altered so that
+
+        <br><br>
+        
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>r_obj1[t+1] = r_obj1[t] + h * v_obj1[t]</code>
+        
+        <br><br>
+        
+        becomes
+        
+        <br><br>
+        
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>r_obj1[t+1] = r_obj1[t] + h * v_obj1[t+1]</code>,
+        
+        <br><br>
+        
+        and
+        
+        <br><br>
+        
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>r_obj2[t+1] = r_obj2[t] + h * v_obj2[t]</code>
+        
+        <br><br>
+        
+        becomes
+        
+        <br><br>
+        
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>r_obj2[t+1] = r_obj2[t] + h * v_obj2[t+1]</code>.
+                
+        <br><br><br>
+
+        <h2>Runge-Kutta</h2>
+
+        <br><br><br>
+
+        <h2>Adams-Bashforth</h2>
+
+        <br><br><br>
+        
+        <h2>Resources</h2><br>
+
+        1. Garcia, A.L., 2017, <em>Numerical Methods for Physics (Python)</em>, pp. 350.
+
+    </div>
+    
+</body>
+
+</html>
